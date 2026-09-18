@@ -12,11 +12,12 @@
 <body>
 <a class="skip-link" href="#app">Skip to content</a>
 <header class="site-header">
-  <span class="site-brand">GitHub, Finally Explained</span>
-  <button id="theme-toggle" type="button" class="btn" aria-label="Toggle dark mode">Theme</button>
+  <span class="site-brand"><svg class="brand-mark" aria-hidden="true" width="22" height="22" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M1.5 8h3.5M11 8h3.5" stroke="currentColor" stroke-width="1.5"/></svg><span class="site-brand-text">GitHub, Finally Explained</span></span>
+  <span class="header-actions"><a class="header-btn" href="#/hub">Hub</a><a class="header-btn" href="#/glossary">Glossary</a><button id="theme-toggle" type="button" class="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false" data-mode="light"><svg class="btn-icon" aria-hidden="true" width="17" height="17" viewBox="0 0 16 16"><path d="M13.2 10.3A5.6 5.6 0 0 1 5.7 2.8a5.6 5.6 0 1 0 7.5 7.5z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span data-theme-label hidden>Dark</span></button></span>
 </header>
-<div class="pipeline-strip" id="pipeline" aria-label="You are here: code journey"></div>
-<nav class="path-rail" id="path-rail" aria-label="Learning path"></nav>
+<div class="wayfinding">
+<div class="pipeline-strip" id="pipeline" role="navigation" aria-label="Learning path: code journey"></div>
+</div>
 <main id="app" tabindex="-1"></main>
 <script src="data/glossary.js"></script>
 <script src="data/curriculum.js"></script>
@@ -34,11 +35,27 @@
 <script src="scripts/main.js"></script>
 <script src="scripts/app.js"></script>
 <script>
-  GHLearn.Theme.init(document);
-  document.getElementById('theme-toggle').addEventListener('click', function () {
-    var cur = document.documentElement.getAttribute('data-theme');
-    GHLearn.Theme.set(document, cur === 'dark' ? 'light' : 'dark');
-  });
+  (function () {
+    var SUN = '<svg class="btn-icon" aria-hidden="true" width="17" height="17" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5v1.8M8 12.7v1.8M1.5 8h1.8M12.7 8h1.8M3.4 3.4l1.3 1.3M11.3 11.3l1.3 1.3M12.6 3.4l-1.3 1.3M4.7 11.3l-1.3 1.3" stroke="currentColor" stroke-width="1.5"/></svg>';
+    var MOON = '<svg class="btn-icon" aria-hidden="true" width="17" height="17" viewBox="0 0 16 16"><path d="M13.2 10.3A5.6 5.6 0 0 1 5.7 2.8a5.6 5.6 0 1 0 7.5 7.5z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>';
+    var btn = document.getElementById('theme-toggle');
+    function paint() {
+      var cur = document.documentElement.getAttribute('data-theme');
+      var dark = cur === 'dark';
+      btn.setAttribute('data-mode', dark ? 'dark' : 'light');
+      btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+      btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+      btn.querySelector('.btn-icon').outerHTML = dark ? SUN : MOON;
+      btn.querySelector('[data-theme-label]').textContent = dark ? 'Light' : 'Dark';
+    }
+    GHLearn.Theme.init(document);
+    paint();
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme');
+      GHLearn.Theme.set(document, cur === 'dark' ? 'light' : 'dark');
+      paint();
+    });
+  })();
 </script>
 </body>
 </html>

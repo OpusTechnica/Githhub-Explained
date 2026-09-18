@@ -55,7 +55,8 @@ test('index.html wires all scripts, landmarks, and strip', () => {
   }
   assert.match(html, /id="app"/);
   assert.match(html, /id="pipeline"/);
-  assert.match(html, /id="path-rail"/);
+  assert.match(html, /href="#\/hub"/);
+  assert.match(html, /href="#\/glossary"/);
   assert.match(html, /skip-link/);
 });
 

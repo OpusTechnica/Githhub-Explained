@@ -44,11 +44,72 @@ test('Progress round-trips done chapters', () => {
 test('components.css covers required class names and a11y rules', () => {
   const css = fs.readFileSync(path.join(ROOT, 'styles/components.css'), 'utf8');
   for (const cls of ['.card', '.btn', '.btn-primary', '.badge-git', '.badge-github',
-      '.pipeline-strip', '.path-rail', '.skip-link', '.teacher-note', '.tabs']) {
+      '.pipeline-strip', '.wayfinding', '.site-brand', '.brand-mark',
+      '.hero-actions', '.chapter-nav', '.theme-toggle', '.btn-icon', '.header-actions',
+      '.header-btn', '.stage-num', '.stage-dot', '.site-brand-text',
+      '.skip-link', '.teacher-note', '.tabs']) {
     assert.match(css, new RegExp(cls.replace('.', '\\.') + '\\b'));
   }
   assert.match(css, /min-height:\s*44px/);
   assert.match(css, /text-wrap:\s*balance/);
+  assert.match(css, /text-decoration:\s*none/);
+});
+
+test('theme toggle is icon-only premium circle, header buttons are compact pills', () => {
+  const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  assert.match(html, /id="theme-toggle"/);
+  assert.match(html, /class="theme-toggle"/);
+  assert.ok(!/class="btn theme-toggle"/.test(html), 'toggle no longer uses .btn shape');
+  assert.match(html, /data-theme-label hidden/);
+  assert.match(html, /aria-pressed/);
+  assert.match(html, /btn-icon/);
+  assert.match(html, /class="header-btn"/);
+  const svg = fs.readFileSync(path.join(ROOT, 'assets/icons.svg'), 'utf8');
+  assert.match(svg, /id="i-sun"/);
+  assert.match(svg, /id="i-moon"/);
+  const css = fs.readFileSync(path.join(ROOT, 'styles/components.css'), 'utf8');
+  assert.match(css, /\.theme-toggle\s*\{[^}]*border-radius:\s*999px/);
+  assert.match(css, /\.header-btn\s*\{[^}]*border-radius:\s*999px/);
+});
+
+test('pipeline is the single chapter nav: numbered stage links, current marked, done dotted', () => {
+  const pipelineEl = { innerHTML: '' };
+  const sandbox = { window: {}, localStorage: null, document: null };
+  sandbox.window.GHLearn = {};
+  const store = {};
+  sandbox.localStorage = {
+    getItem: (k) => (k in store ? store[k] : null),
+    setItem: (k, v) => { store[k] = String(v); },
+    removeItem: (k) => { delete store[k]; },
+  };
+  sandbox.window.localStorage = sandbox.localStorage;
+  sandbox.document = {
+    addEventListener: () => {},
+    getElementById: (id) => (id === 'pipeline' ? pipelineEl : null),
+  };
+  vm.createContext(sandbox);
+  for (const f of ['scripts/progress.js', 'scripts/router.js', 'scripts/app.js']) {
+    const code = fs.readFileSync(path.join(ROOT, f), 'utf8');
+    vm.runInContext(code, sandbox, { filename: f });
+  }
+  const GHLearn = sandbox.window.GHLearn;
+  GHLearn.Progress.set('doneChapters', [1, 2]);
+  GHLearn.App.renderPipeline(1, 'chapter-3');
+  assert.match(pipelineEl.innerHTML, /You are here:/);
+  assert.match(pipelineEl.innerHTML, /aria-current="page"/);
+  assert.match(pipelineEl.innerHTML, /stage-num/);
+  assert.match(pipelineEl.innerHTML, /#\/chapter-3/);
+  assert.match(pipelineEl.innerHTML, /stage-dot stage-done/);
+  assert.match(pipelineEl.innerHTML, /stage-dot stage-todo/);
+  assert.ok(!('renderRail' in GHLearn.App), 'path-rail renderer removed');
+  const appSrc = fs.readFileSync(path.join(ROOT, 'scripts/app.js'), 'utf8');
+  assert.ok(!/path-rail/.test(appSrc), 'no path-rail references in app.js');
+  const css = fs.readFileSync(path.join(ROOT, 'styles/components.css'), 'utf8');
+  assert.ok(!/\.path-rail/.test(css), 'no path-rail rules in components.css');
+  const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  assert.ok(!/id="path-rail"/.test(html), 'no path-rail node in index.html');
+  assert.match(html, /href="#\/hub"/);
+  assert.match(html, /href="#\/glossary"/);
 });
 
 test('icons.svg has the required symbols, no emoji', () => {

@@ -1,7 +1,8 @@
 (function () {
   window.GHLearn = window.GHLearn || {};
   var STAGES = ['Commit', 'Branch', 'Push', 'Pull request', 'Review', 'Merge', 'Release'];
-  var STAGE_FOR_CHAPTER = { 1: 0, 2: 0, 3: 1, 4: 3, 5: 3, 6: 2, 7: 6, 8: 5 };
+  var STAGE_FOR_CHAPTER = { 1: 0, 2: 0, 3: 1, 4: 3, 5: 4, 6: 2, 7: 6, 8: 5 };
+  var STAGE_CHAPTERS = [[1, 2], [3], [6], [4], [5], [8], [7]];
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -17,31 +18,34 @@
     if (d.indexOf(n) === -1) { d.push(n); window.GHLearn.Progress.set('doneChapters', d); }
   }
 
-  function renderPipeline(activeStage) {
+  function renderPipeline(activeStage, current) {
     var el = document.getElementById('pipeline');
     if (!el) return;
-    var h = '';
-    for (var i = 0; i < STAGES.length; i++) {
-      h += '<span class="stage"' + (i === activeStage ? ' aria-current="step"' : '') + '>'
-        + esc(STAGES[i]) + '</span>';
-      if (i < STAGES.length - 1) h += '<span aria-hidden="true">→</span>';
+    if (!current && window.GHLearn.Router && typeof window.location !== 'undefined') {
+      try { current = window.GHLearn.Router.routeFor(window.location.hash); } catch (e) { current = ''; }
     }
-    el.innerHTML = h;
-  }
-
-  function renderRail() {
-    var el = document.getElementById('path-rail');
-    if (!el) return;
-    var chs = chapters();
+    var cur = current || '';
     var done = doneList();
-    var h = '<a href="#/hub">Hub</a>';
-    for (var n = 1; n <= 8; n++) {
-      if (!chs[n]) continue;
-      var dot = done.indexOf(n) !== -1 ? ' ●' : ' ○';
-      h += ' <a href="#/chapter-' + n + '"' + (done.indexOf(n) !== -1 ? ' aria-label="Chapter ' + n + ' done"' : '') + '>'
-        + 'Ch ' + n + esc(dot) + '</a>';
+    var h = '<span class="wayfinding-label" aria-hidden="true">You are here:</span>';
+    for (var i = 0; i < STAGES.length; i++) {
+      var nums = STAGE_CHAPTERS[i] || [];
+      var target = nums.length ? nums[0] : 0;
+      var isCur = nums.some(function (n) { return cur === 'chapter-' + n; });
+      var isStep = i === activeStage;
+      var isDone = nums.length && nums.every(function (n) { return done.indexOf(n) !== -1; });
+      var curAttr = isCur ? ' aria-current="page"' : (isStep ? ' aria-current="step"' : '');
+      var attrs = ' class="stage"' + curAttr
+        + (isDone && !isCur ? ' aria-label="' + esc(STAGES[i]) + ' done"' : '');
+      var badge = nums.length ? '<span class="stage-num">' + nums.join('·') + '</span>' : '';
+      var dot = isCur ? ''
+        : isDone ? '<span class="stage-dot stage-done" aria-hidden="true"> ●</span>'
+        : '<span class="stage-dot stage-todo" aria-hidden="true"> ○</span>';
+      var inner = badge + esc(STAGES[i]) + dot;
+      h += target
+        ? '<a href="#/chapter-' + target + '"' + attrs + '>' + inner + '</a>'
+        : '<span' + attrs + '>' + inner + '</span>';
+      if (i < STAGES.length - 1) h += '<span class="stage-arrow" aria-hidden="true">→</span>';
     }
-    h += ' <a href="#/glossary">Glossary</a>';
     el.innerHTML = h;
   }
 
@@ -220,7 +224,7 @@
     var done = doneList();
     var h = '<section class="hero"><h1>GitHub, Finally Explained</h1>'
       + '<p>From first commit to confident collaborator: branches, pull requests, issues, forks, robots, and releases.</p>'
-      + '<p><a class="btn btn-primary" href="#/chapter-1">Start Chapter 1</a> '
+      + '<p class="hero-actions"><a class="btn btn-primary" href="#/chapter-1">Start Chapter 1</a> '
       + '<a class="btn" href="#/glossary">Browse glossary</a></p></section>';
     h += '<section aria-label="Learning path"><h2>Your path</h2>';
     for (var n = 1; n <= 8; n++) {
@@ -248,9 +252,9 @@
     if (ch.sandbox) h += '<div data-sim="sandbox"></div>';
     if (ch.quiz) h += '<div data-sim="quiz"></div>';
     if (ch.kind === 'capstone') h += '<div data-capstone></div>';
-    h += '<p><a class="btn" href="#/hub">Back to hub</a> ';
+    h += '<nav class="chapter-nav" aria-label="Chapter navigation"><a class="btn" href="#/hub">Back to hub</a>';
     if (n < 8 && chapters()[n + 1]) h += '<a class="btn btn-primary" href="#/chapter-' + (n + 1) + '">Next: chapter ' + (n + 1) + '</a>';
-    h += '</p>';
+    h += '</nav>';
     return h;
   }
 
@@ -280,9 +284,8 @@
     var app = document.getElementById('app');
     if (!app) return;
     var route = window.GHLearn.Router.routeFor(window.location.hash);
-    renderRail();
     if (route === 'glossary') {
-      renderPipeline(-1);
+      renderPipeline(-1, route);
       app.innerHTML = glossaryHTML();
       paintGlossary();
       return;
@@ -290,16 +293,16 @@
     if (route.indexOf('chapter-') === 0) {
       var n = parseInt(route.split('-')[1], 10);
       var ch = chapters()[n];
-      renderPipeline(ch ? (STAGE_FOR_CHAPTER[n] == null ? -1 : STAGE_FOR_CHAPTER[n]) : -1);
+      renderPipeline(ch ? (STAGE_FOR_CHAPTER[n] == null ? -1 : STAGE_FOR_CHAPTER[n]) : -1, route);
       app.innerHTML = chapterHTML(n);
       if (ch) { mountSims(app, ch); mountCapstone(app, ch); }
       return;
     }
-    renderPipeline(-1);
+    renderPipeline(-1, route);
     app.innerHTML = hubHTML();
   }
 
-  window.GHLearn.App = { render: render, renderPipeline: renderPipeline, renderRail: renderRail };
+  window.GHLearn.App = { render: render, renderPipeline: renderPipeline };
   if (typeof document !== 'undefined' && document.addEventListener) {
     document.addEventListener('DOMContentLoaded', function () {
       render();
