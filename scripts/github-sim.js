@@ -30,4 +30,20 @@
       return { ok: true };
     },
   };
+  window.GHLearn.Sim.Issue = {
+    fresh: function (f) {
+      return { id: f.id, status: 'open', assignee: null, labels: [], linkedPR: null };
+    },
+    assign: function (s, who) { s.assignee = who; return s; },
+    label: function (s, l) { if (s.labels.indexOf(l) === -1) s.labels.push(l); return s; },
+    linkPR: function (s, n) { s.linkedPR = n; return s; },
+    commentClose: function (s, body) {
+      var m = /(fixes|closes|resolves)\s+#(\d+)/i.exec(body || '');
+      if (m && s.linkedPR && parseInt(m[2], 10) === s.linkedPR) {
+        s.status = 'closed';
+        return { ok: true };
+      }
+      return { ok: false, reason: 'Use a closing keyword with the linked PR number, e.g. "Fixes #42".' };
+    },
+  };
 })();

@@ -46,3 +46,8 @@ window.GHLearn.data.pr = {
   ],
   reviewers: ['sam'],
 };
+
+window.GHLearn.data.issue = {
+  id: 17, title: 'Dark mode unreadable at noon', milestone: 'v1.1',
+  body: 'Contrast fails in sunlight on the settings page.',
+};
