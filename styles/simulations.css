@@ -1,2 +1,15 @@
 .sim { border: 1px solid var(--border); border-radius: var(--radius-card); background: var(--surface-1); padding: 16px; margin: 16px 0; }
 .sim-graph svg { width: 100%; height: auto; }
+.sim-graph circle { fill: var(--info); stroke: var(--text); stroke-width: 2; }
+.sim-graph .sha { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.sim-pr .tabs { margin-bottom: 8px; }
+.checks-row { font-family: var(--font-mono); font-size: 13px; border: 1px solid var(--border); border-radius: var(--radius-btn); padding: 8px 12px; background: var(--canvas); }
+.sim-sandbox .sandbox-term { font-family: var(--font-mono); font-size: 13px; background: var(--canvas); border: 1px solid var(--border); border-radius: var(--radius-btn); padding: 12px; max-height: 240px; overflow-y: auto; }
+.sim-sandbox .sandbox-term p { margin: 4px 0; }
+.quiz-feedback { border-left: 3px solid var(--border); padding: 8px 12px; margin: 8px 0; }
+.quiz-feedback.quiz-ok { border-left-color: var(--success); }
+.quiz-feedback.quiz-no { border-left-color: var(--danger); }
+.sim-capstone li { margin: 8px 0; }
+.sim-capstone input[type="checkbox"] { min-width: 44px; min-height: 44px; vertical-align: middle; }
+.playground-card h3 { margin-top: 0; }
+.glossary-card h3 { margin-top: 0; }
