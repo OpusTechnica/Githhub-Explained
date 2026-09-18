@@ -29,7 +29,8 @@ window.GHLearn.data.chapters = {
         confusion: 'Beginners often think saving a file shares it, but actually nothing leaves your computer until you [[push]].',
         deep: 'Your [[remote-tracking branch]] snapshots show where the [[remote]] was last time you ran [[fetch]].' },
     ],
-    recap: ['repository', 'commit', 'remote'], quiz: 'quiz-ch1' },
+    recap: ['repository', 'commit', 'remote'], quiz: 'quiz-ch1',
+    sandbox: { script: ['clone https://github.com/acme/notes.git', 'status', 'log'] } },
   2: { n: 2, title: 'Your first repo',
     story: 'Priya creates the Acme Notes [[repository]] and adds a [[README]] so Sam knows what the app is for. Then she records her first [[commit]] and connects a [[remote]] named [[origin]] so they can share everything.',
     concepts: [
@@ -64,5 +65,6 @@ window.GHLearn.data.chapters = {
         confusion: 'Beginners often think [[fetch]] updates their files, but actually it only downloads news; [[pull]] applies it.',
         deep: '[[pull]] is really [[fetch]] plus [[merge]] in one step, which is why clashes appear as a [[merge conflict]].' },
     ],
-    recap: ['commit', 'push', 'pull request'], quiz: 'quiz-ch2' },
+    recap: ['commit', 'push', 'pull request'], quiz: 'quiz-ch2',
+    sandbox: { script: ['clone https://github.com/acme/notes.git', 'status', 'add app.js', 'commit -m "add notes list"', 'push'] } },
 };
