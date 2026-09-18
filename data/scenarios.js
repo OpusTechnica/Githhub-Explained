@@ -32,3 +32,17 @@ window.GHLearn.data.scenarios = {
         nodes: [{ id: 'c1', lane: 'main', msg: 'base' }, { id: 'c2', lane: 'main', msg: 'title: Acme Notes' }, { id: 'c4', lane: 'main', msg: 'resolve: Acme Notes (dark)', head: true }] },
     ] },
 };
+
+window.GHLearn.data.pr = {
+  id: 'pr-42', title: 'Add dark mode', branch: 'dark-mode', base: 'main',
+  files: [
+    { path: 'theme.css', adds: 30, dels: 2 },
+    { path: 'app.js', adds: 12, dels: 4 },
+    { path: 'README.md', adds: 5, dels: 0 },
+  ],
+  checks: [
+    { name: 'tests', status: 'pass' },
+    { name: 'lint', status: 'pass' },
+  ],
+  reviewers: ['sam'],
+};
