@@ -1,0 +1,31 @@
+body { margin: 0; background: var(--canvas); color: var(--text); font-family: var(--font-ui); line-height: 1.6; }
+.skip-link { position: absolute; left: -999px; top: 0; background: var(--text); color: var(--canvas); padding: 8px 12px; z-index: var(--z-dialog); }
+.skip-link:focus { left: 8px; top: 8px; }
+.site-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--canvas); z-index: var(--z-sticky); }
+h1, h2, h3 { text-wrap: balance; line-height: 1.25; }
+p, li { text-wrap: pretty; }
+.mono, code, kbd, .sha { font-family: var(--font-mono); }
+.sha, .counter { font-variant-numeric: tabular-nums; }
+.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 20px; margin: 16px 0; }
+.btn { min-height: 44px; padding: 10px 18px; border-radius: var(--radius-btn); border: 1px solid var(--border); background: var(--surface-1); color: var(--text); cursor: pointer; transition: transform var(--dur-fast) var(--ease); }
+.btn-primary { background: var(--success); border-color: transparent; color: #fff; }
+[data-theme="light"] .btn-primary { color: #fff; }
+.btn:active { transform: scale(0.98); }
+.btn:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+.btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+.badge-git, .badge-github { display: inline-block; font-size: 12px; font-weight: 600; border-radius: 999px; padding: 2px 10px; border: 1px solid var(--border); }
+.badge-git { background: var(--surface-2); }
+.badge-github { background: var(--info); color: #fff; border-color: transparent; }
+.teacher-note { border-left: 3px solid var(--teacher); padding: 8px 12px; background: var(--surface-1); margin: 12px 0; }
+.pipeline-strip { display: flex; gap: 4px; overflow-x: auto; padding: 8px 20px; border-bottom: 1px solid var(--border); font-size: 13px; }
+.pipeline-strip .stage { white-space: nowrap; padding: 4px 8px; border-radius: 999px; }
+.pipeline-strip .stage[aria-current="step"] { background: var(--teacher); color: #000; font-weight: 700; }
+.path-rail { display: flex; gap: 8px; padding: 12px 20px; overflow-x: auto; border-bottom: 1px solid var(--border); }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); }
+.tabs button { min-height: 44px; background: none; border: none; color: var(--text); padding: 8px 14px; cursor: pointer; border-bottom: 2px solid transparent; }
+.tabs button[aria-selected="true"] { border-bottom-color: var(--info); font-weight: 600; }
+input[type="text"], input[type="search"] { min-height: 44px; padding: 8px 12px; border-radius: var(--radius-input); border: 1px solid var(--border); background: var(--canvas); color: var(--text); font-family: var(--font-mono); }
+.status-open { color: var(--success); } .status-closed { color: var(--danger); }
+.status-draft, .status-pending { color: var(--attention); } .status-merged { color: var(--info); }
+main { max-width: 76ch; margin: 0 auto; padding: 24px 20px 64px; }
+.stage-wide { max-width: 1100px; margin: 0 auto; }

@@ -1,0 +1,2 @@
+.sim { border: 1px solid var(--border); border-radius: var(--radius-card); background: var(--surface-1); padding: 16px; margin: 16px 0; }
+.sim-graph svg { width: 100%; height: auto; }
