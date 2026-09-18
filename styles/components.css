@@ -7,7 +7,7 @@ p, li { text-wrap: pretty; }
 .mono, code, kbd, .sha { font-family: var(--font-mono); }
 .sha, .counter { font-variant-numeric: tabular-nums; }
 .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 20px; margin: 16px 0; }
-.btn { min-height: 44px; padding: 10px 18px; border-radius: var(--radius-btn); border: 1px solid var(--border); background: var(--surface-1); color: var(--text); cursor: pointer; transition: transform var(--dur-fast) var(--ease); }
+.btn { display: inline-block; min-height: 44px; padding: 10px 18px; border-radius: var(--radius-btn); border: 1px solid var(--border); background: var(--surface-1); color: var(--text); cursor: pointer; transition: transform var(--dur-fast) var(--ease); }
 .btn-primary { background: var(--success); border-color: transparent; color: #fff; }
 [data-theme="light"] .btn-primary { color: #fff; }
 .btn:active { transform: scale(0.98); }
@@ -21,6 +21,7 @@ p, li { text-wrap: pretty; }
 .pipeline-strip .stage { white-space: nowrap; padding: 4px 8px; border-radius: 999px; }
 .pipeline-strip .stage[aria-current="step"] { background: var(--teacher); color: #000; font-weight: 700; }
 .path-rail { display: flex; gap: 8px; padding: 12px 20px; overflow-x: auto; border-bottom: 1px solid var(--border); }
+.path-rail a { display: inline-flex; align-items: center; min-height: 44px; }
 .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); }
 .tabs button { min-height: 44px; background: none; border: none; color: var(--text); padding: 8px 14px; cursor: pointer; border-bottom: 2px solid transparent; }
 .tabs button[aria-selected="true"] { border-bottom-color: var(--info); font-weight: 600; }

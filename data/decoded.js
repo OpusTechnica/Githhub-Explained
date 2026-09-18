@@ -36,5 +36,5 @@ window.GHLearn.data.decoded = [
     sim: 'release' },
   { phrase: 'LGTM — looks good to me', means: 'A reviewer is giving a thumbs-up. It signals approval, not an automatic merge.',
     do: 'Wait for any required approvals and green checks, then merge.',
-    sim: 'issue' },
+    sim: 'pr' },
 ];

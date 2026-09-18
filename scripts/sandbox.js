@@ -39,7 +39,7 @@
     if (nc) return nc;
     if (cmd === 'status') {
       var d = dirtyFiles(st), s = stagedFiles(st);
-      var unpushed = st.commits.length - st.pushed;
+      var unpushed = Math.max(0, st.commits.length - st.pushed);
       var msg = 'On branch ' + st.head + '. ';
       msg += s.length ? 'Staged: ' + s.join(', ') + '. ' : 'Nothing staged. ';
       msg += d.length ? 'Changed, not staged: ' + d.join(', ') + '. ' : 'Working tree clean. ';
@@ -65,12 +65,13 @@
     if (cmd === 'branch') {
       var b = parts[1];
       if (!b) return { output: 'Branch name needed.', coaching: 'Try: branch dark-mode', changed: false };
+      if (b === '__proto__' || b === 'constructor' || b === 'prototype') return { output: 'Branch name "' + b + '" is reserved.', coaching: 'Pick a plain branch name like dark-mode or fix-login.', changed: false };
       st.branches[b] = st.branches[st.head];
       return { output: 'Created branch ' + b + ' (duplicated your game save).', coaching: null, changed: true };
     }
     if (cmd === 'switch') {
       var t = parts[1];
-      if (!(t in st.branches)) return { output: 'No branch ' + t + '.', coaching: 'Create it first: branch ' + (t || 'my-branch'), changed: false };
+      if (!Object.prototype.hasOwnProperty.call(st.branches, t)) return { output: 'No branch ' + t + '.', coaching: 'Create it first: branch ' + (t || 'my-branch'), changed: false };
       st.head = t;
       return { output: 'Now on ' + t + '. Your files reflect its latest save-point.', coaching: null, changed: true };
     }
@@ -102,7 +103,7 @@
     }
     if (cmd === 'merge') {
       var mb = parts[1];
-      if (!(mb in st.branches)) return { output: 'No branch ' + mb + '.', coaching: 'switch to main first, then merge <branch>.', changed: false };
+      if (!Object.prototype.hasOwnProperty.call(st.branches, mb)) return { output: 'No branch ' + mb + '.', coaching: 'switch to main first, then merge <branch>.', changed: false };
       st.commits.push({ id: sha(), msg: 'merge ' + mb + ' into ' + st.head });
       st.branches[st.head] = st.commits.length - 1;
       return { output: 'Merged ' + mb + ' into ' + st.head + '. Two histories, one story.', coaching: null, changed: true };
