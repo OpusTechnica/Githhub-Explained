@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GitHub, Finally Explained — from first commit to confident collaborator</title>
+<meta name="description" content="A friendly, interactive journey from Git basics to confident GitHub collaboration: branches, pull requests, issues, forks, actions, and releases.">
+<link rel="stylesheet" href="styles/tokens.css">
+<link rel="stylesheet" href="styles/components.css">
+<link rel="stylesheet" href="styles/simulations.css">
+</head>
+<body>
+<a class="skip-link" href="#app">Skip to content</a>
+<header class="site-header">
+  <span class="site-brand">GitHub, Finally Explained</span>
+  <button id="theme-toggle" type="button" aria-label="Toggle dark mode">Theme</button>
+</header>
+<div class="pipeline-strip" id="pipeline" aria-label="You are here: code journey"></div>
+<nav class="path-rail" id="path-rail" aria-label="Learning path"></nav>
+<main id="app" tabindex="-1"></main>
+<script src="data/glossary.js"></script>
+<script src="data/curriculum.js"></script>
+<script src="data/scenarios.js"></script>
+<script src="data/quizzes.js"></script>
+<script src="data/decoded.js"></script>
+<script src="scripts/progress.js"></script>
+<script src="scripts/router.js"></script>
+<script src="scripts/graph.js"></script>
+<script src="scripts/github-sim.js"></script>
+<script src="scripts/sandbox.js"></script>
+<script src="scripts/quiz.js"></script>
+<script src="scripts/glossary.js"></script>
+<script src="scripts/main.js"></script>
+<script>
+  GHLearn.Theme.init(document);
+  document.getElementById('theme-toggle').addEventListener('click', function () {
+    var cur = document.documentElement.getAttribute('data-theme');
+    GHLearn.Theme.set(document, cur === 'dark' ? 'light' : 'dark');
+  });
+</script>
+</body>
+</html>
