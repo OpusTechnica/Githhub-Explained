@@ -49,6 +49,26 @@ test('Theme persists and restores dark', () => {
   assert.equal(attrs['data-theme'], 'dark');
 });
 
+test('Theme honors prefers-color-scheme, falls back to light', () => {
+  const GHLearn = load(['scripts/main.js']);
+  const mkDoc = (matchMedia) => {
+    const attrs = {};
+    const doc = { documentElement: {
+      setAttribute: (k, v) => { attrs[k] = v; },
+      getAttribute: (k) => attrs[k] || null,
+    }};
+    if (matchMedia) doc.defaultView = { matchMedia };
+    return { doc, attrs };
+  };
+  const dark = mkDoc(() => ({ matches: true }));
+  assert.equal(GHLearn.Theme.init(dark.doc), 'dark');
+  assert.equal(dark.attrs['data-theme'], 'dark');
+  const GHLearn2 = load(['scripts/main.js']);
+  const plain = mkDoc(null);
+  assert.equal(GHLearn2.Theme.init(plain.doc), 'light');
+  assert.equal(plain.attrs['data-theme'], 'light');
+});
+
 test('tokens.css defines both themes and motion tokens', () => {
   const css = fs.readFileSync(path.join(ROOT, 'styles/tokens.css'), 'utf8');
   assert.match(css, /\[data-theme="dark"\]/);

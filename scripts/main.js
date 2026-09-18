@@ -19,8 +19,14 @@
     init: function (doc) {
       var saved = this.get();
       if (saved) { this.set(doc, saved); return saved; }
-      this.set(doc, 'light');
-      return 'light';
+      var prefersDark = false;
+      try {
+        var w = doc && doc.defaultView;
+        if (w && w.matchMedia) prefersDark = !!w.matchMedia('(prefers-color-scheme: dark)').matches;
+      } catch (e) { prefersDark = false; }
+      var t = prefersDark ? 'dark' : 'light';
+      this.set(doc, t);
+      return t;
     },
   };
 })();
